@@ -1,4 +1,6 @@
-const { resolve } = require("path");
+const {
+  resolve
+} = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
@@ -13,32 +15,39 @@ module.exports = {
   },
   //loader
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.css$/,
         // loader: ["style-loader", "css-loader"] //css loader
         loader: ExtractTextPlugin.extract({
           //把css打包到指定文件夹
           fallback: "style-loader",
-          use: "css-loader",
+          use: ["css-loader", "postcss-loader"],
           publicPath: "../" //css中文件的路径
         })
       },
       {
-        test: /\.(less|sass)$/
+        test: /\.less$/,
+        use: ["style-loader", "css-loader", "less-loader "] //less loader
+      },
+      {
+        test: /\.(sass|scss)$/,
+        use: ["style-loader", "css-loader", "sass-loader "] //sass loader
       },
       {
         test: /\.(jpg|jpeg|png|gif|svg|webp)$/,
-        use: [
-          {
-            loader: "url-loader",
-            options: {
-              limit: 4 * 1024, //超过4kb，转换成base64的图片
-              outputPath: "imgs" //打包后输出的路径
-            }
+        use: [{
+          loader: "url-loader",
+          options: {
+            limit: 4 * 1024, //超过4kb，转换成base64的图片
+            outputPath: "imgs" //打包后输出的路径
           }
-        ]
-      }
+        }]
+      },
+      // {
+      //   test: /\.(js|jsx)/,
+      //   use: ["babel-loader"],
+      //   exclude: /node_modules/
+      // }
     ]
   },
   //插件
