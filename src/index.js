@@ -1,14 +1,15 @@
-import "./index.css";
-import App, {
-  a
-} from "./app.js";
-App();
+ import "./index.css";
+ import "./index.less";
+ import App, {
+   a
+ } from "./app.js";
+ console.log(a, App);
+ import imgsrc from "./img/2.jpeg";
+ let img = new Image();
+ img.onload = function () {
+   document.body.appendChild(img);
+ };
+ img.src = imgsrc;
 
-console.log(a);
-// console.log(b);
-import imgsrc from "../public/imgs/dog.jpg";
-let img = new Image();
-img.onload = function () {
-  document.body.appendChild(img);
-};
-img.src = imgsrc;
+ let b = 666;
+ console.log(b);
