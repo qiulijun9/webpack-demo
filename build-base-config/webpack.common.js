@@ -1,8 +1,7 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const {
-  srcPath,
-  distPath
+  srcPath
 } = require('./paths')
 
 module.exports = {
@@ -12,31 +11,15 @@ module.exports = {
     other: path.join(srcPath, 'other.js'),
   },
   module: {
-    rules: [{
-        test: /\.js$/,
-        loader: ['babel-loader'],
-        include: srcPath,
-        exclude: /node_modules/
-      },
+    rules: [ 
+    //  {
+    //     test: /.html$/,
+    //     use: "html-withimg-loader" //在html中引入img
+    //  },
       {
-        test: /.html$/,
-        use: "html-withimg-loader" //在html中引入img
+        test: /\.html$/,
+        loader: "html-loader" // 引入 img 等资源将其交付给 url-loader
       },
-      // {
-      //     test: /\.vue$/,
-      //     loader: ['vue-loader'],
-      //     include: srcPath
-      // },
-      {
-        test: /\.css$/,
-        // loader 的执行顺序是：从后往前
-        loader: ['style-loader', 'css-loader', 'postcss-loader'] // 加了 postcss
-      },
-      {
-        test: /\.less$/,
-        // 增加 'less-loader' ，注意顺序
-        loader: ['style-loader', 'css-loader', 'less-loader']
-      }
     ]
   },
   plugins: [

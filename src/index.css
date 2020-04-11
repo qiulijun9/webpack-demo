@@ -1,8 +1,8 @@
 body {
   background-color: #eee;
   background-image: url('../public/imgs/dog.jpg');
-  width: 200px;
-  height: 300px;
+  background-size: 100% 500px;
+  background-repeat: no-repeat;
 }
 
 #root {
