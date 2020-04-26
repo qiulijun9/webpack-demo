@@ -12,6 +12,9 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const HappyPack = require('happypack');
 const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const {
   smart
 } = require("webpack-merge");
@@ -20,8 +23,8 @@ const {
   distPath
 } = require('./paths')
 
-
-module.exports = smart(webpackCommonConf, {
+const smp = new SpeedMeasurePlugin();
+module.exports = smp.wrap(smart(webpackCommonConf, {
   mode: "production",
   output: {
     // filename: "bundle.[contentHash:8].js", // 打包代码时，加上 hash 戳可以命中缓存
@@ -33,6 +36,8 @@ module.exports = smart(webpackCommonConf, {
       {
         test: /\.js$/,
         use: ['happypack/loader?id=babel'],//开启缓存babel-loader?cacheDirectory
+        //use:['babel-loader?cacheDirectory','thread-loader'],
+        // use: ['thread-loader'],
         exclude: /node_modules/ //忽略那些文件
      },
       // 图片 - 考虑 base64 编码的情况
@@ -81,6 +86,7 @@ module.exports = smart(webpackCommonConf, {
     noParse:[/react\.min\.js$/]
   },
   plugins: [
+    new ProgressBarPlugin(),//打包时显示进度条
     new CleanWebpackPlugin(), // 会默认清空 output.path 文件夹
     new webpack.DefinePlugin({
       // window.ENV = 'production'
@@ -97,6 +103,8 @@ module.exports = smart(webpackCommonConf, {
       id:"babel",
       loaders:['babel-loader?cacheDirectory']
     }),
+    //查看打包体积
+    new BundleAnalyzerPlugin(),
     //优化loadsh,但没有做到实质性的优化
     // 使用 ParallelUglifyPlugin 并行压缩输出的 JS 代码
     new ParallelUglifyPlugin({
@@ -146,4 +154,4 @@ module.exports = smart(webpackCommonConf, {
     //   }
     // }
   }
-});
+}));
